@@ -38,15 +38,20 @@ void GameRunner::run() {
         player2 = new Player;
     }
 
-    while (not board.isGameDone()){
+    while (board.getGameState()){
         player1.play();
+        board.useSlot();
+        board.updateGameState();
 
-        if(board.isGameDone()){
+        if(board.getGameState()){
             declareResult();
         }
-        player2->play();
 
-        if(board.isGameDone()){
+        player2->play();
+        board.useSlot();
+        board.updateGameState();
+
+        if(board.getGameState()){
             declareResult();
         }
     }
@@ -59,8 +64,8 @@ void GameRunner::systemPause() {
     system("Pause");
 }
 
-bool GameRunner::isValidMenuUserInput(string &take) {
-    if(take != "1" && take != "2" && take != "3"){
+bool GameRunner::isValidMenuUserInput(string & input) {
+    if(input != "1" && input != "2" && input != "3"){
         return false;
     }
     return true;
@@ -80,7 +85,7 @@ short GameRunner::otherPlayer(short &player) {
 
 
 void GameRunner::declareResult() {
-    if(board.isThereAWinner()){
+    if(board.getGameState() == 2){
         cout << "Congrats Player" << lastPlayer << "! You win!" << '\n';
         cout << "GG Player " << otherPlayer(lastPlayer) << '\n';
     }else{
