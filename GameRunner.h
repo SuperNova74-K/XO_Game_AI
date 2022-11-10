@@ -7,16 +7,26 @@
 
 
 #include <bits/stdc++.h>
+#include "Player.h"
+#include "Board.h"
 using namespace std;
 
 
 class GameRunner {
 private:
     short lastPlayer = 1;
+    Player player1;
+    Player* player2;
+    Board board;
+    bool isValidMenuUserInput(string& take);
+    static void  clearTerminal();
+    static void  systemPause();
+    static short otherPlayer(short & player);
+    void declareResult();
 
-    bool validMenuUserInput(string take);
 public:
     void run();
+    ~GameRunner();
 };
 
 
