@@ -9,11 +9,11 @@ void GameRunner::run() {
     string userChoice;
     bool validUserChoice = false;
     do {
-        cout << "Hello Players!"
-                "Please Choose one of the following choices:"
-                "(1) Player VS Player."
-                "(2) Player VS AI."
-                "(3) Exit Program."
+        cout << "Hello Players!\n"
+                "Please Choose one of the following choices:\n"
+                "(1) Player VS Player.\n"
+                "(2) Player VS AI.\n"
+                "(3) Exit Program.\n"
                 "Enter Your Choice Here: ";
 
         getline(cin, userChoice);
@@ -35,22 +35,29 @@ void GameRunner::run() {
     if(userChoice == "2"){
         player2 = new AI;
     }else{
-        player2 = new Player;
+        player2 = new Player(2);
     }
 
-    while (board.getGameState()){
-        player1.play();
+    board.print();
+    while (not board.getGameState()){
+        player1.play(board);
         board.useSlot();
         board.updateGameState();
+
+        clearTerminal();
+        board.print();
 
         if(board.getGameState()){
             declareResult();
+            break;
         }
 
-        player2->play();
+        player2->play(board);
         board.useSlot();
         board.updateGameState();
 
+        clearTerminal();
+        board.print();
         if(board.getGameState()){
             declareResult();
         }
@@ -85,11 +92,12 @@ short GameRunner::otherPlayer(short &player) {
 
 
 void GameRunner::declareResult() {
-    if(board.getGameState() == 2){
+    if(board.getGameState() == 1){
         cout << "Congrats Player" << lastPlayer << "! You win!" << '\n';
         cout << "GG Player " << otherPlayer(lastPlayer) << '\n';
     }else{
         cout << "Draw!" << '\n';
         cout << "GG Players!" << '\n';
     }
+    systemPause();
 }

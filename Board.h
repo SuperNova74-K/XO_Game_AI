@@ -10,13 +10,22 @@ using namespace std;
 
 class Board {
 private:
-    vector<vector<short>>board{{0,0,0},{0,0,0},{0,0,0}};
+    // in Board Values...
+    // -1, 0, 1 values are for minmax
+    // 3 for X (Player 1)
+    // 4 for O (Player 2)
+    // 4 for empty
+    vector<vector<short>>board{{5,5,5},{5,5,5},{5,5,5}};
     short slotsUsed = 0;
-
+    short gameState = 0; // 0 is still in play, 1 is draw , 2 is win
+    static char printableFormOf(short & x);
 public:
-    bool isDraw();
-    int isThereAWinner(int lastPlayer);
-    bool isGameDone();
+    bool isDrawAssumingNotWin() const;
+    bool isWin();
+    short getGameState();
+    void print();
+    void updateGameState();
+    void useSlot();
     vector<short>& operator[](int x);
 };
 

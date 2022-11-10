@@ -18,7 +18,7 @@ private:
     Player player1;
     Player* player2;
     Board board;
-    bool isValidMenuUserInput(string& input);
+    static bool isValidMenuUserInput(string& input);
     static void  clearTerminal();
     static void  systemPause();
     static short otherPlayer(short & player);
