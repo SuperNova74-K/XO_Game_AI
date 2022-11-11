@@ -23,9 +23,11 @@ public:
     bool isDrawAssumingNotWin() const;
     bool isWin();
     short getGameState();
+    void setGameState(short x);
     void print();
     void updateGameState();
     void useSlot();
+    void freeSlot();
     vector<short>& operator[](int x);
 };
 

@@ -29,6 +29,7 @@ void GameRunner::run() {
     }while(not validUserChoice);
 
     if(userChoice == "3"){
+        player2 = new Player;
         return;
     }
 
@@ -41,26 +42,30 @@ void GameRunner::run() {
     board.print();
     while (not board.getGameState()){
         player1.play(board);
+        lastPlayer = 1;
         board.useSlot();
         board.updateGameState();
-
-        clearTerminal();
-        board.print();
 
         if(board.getGameState()){
             declareResult();
             break;
         }
 
+        clearTerminal();
+        board.print();
+
+
         player2->play(board);
+        lastPlayer = 2;
         board.useSlot();
         board.updateGameState();
 
-        clearTerminal();
-        board.print();
         if(board.getGameState()){
             declareResult();
+            break;
         }
+        clearTerminal();
+        board.print();
     }
 }
 void GameRunner::clearTerminal() {
@@ -92,12 +97,13 @@ short GameRunner::otherPlayer(short &player) {
 
 
 void GameRunner::declareResult() {
-    if(board.getGameState() == 1){
+    if(board.getGameState() == 2){
         cout << "Congrats Player" << lastPlayer << "! You win!" << '\n';
-        cout << "GG Player " << otherPlayer(lastPlayer) << '\n';
+        cout << "GG Player " << otherPlayer(lastPlayer);
     }else{
         cout << "Draw!" << '\n';
-        cout << "GG Players!" << '\n';
+        cout << "GG Players!";
     }
+    cout << endl;
     systemPause();
 }

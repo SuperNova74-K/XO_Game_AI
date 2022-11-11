@@ -14,9 +14,9 @@ short Board::getGameState() {
 
 void Board::updateGameState() {
     if(isWin()){
-        gameState = 1;
-    }else if(isDrawAssumingNotWin()){
         gameState = 2;
+    }else if(isDrawAssumingNotWin()){
+        gameState = 1;
     }
 }
 
@@ -35,7 +35,7 @@ void Board::print() {
         }
         cout << '\n';
     }
-    cout << "_________\n";
+    cout << "_________" << endl;
 }
 
 char Board::printableFormOf(short & x) {
@@ -52,33 +52,35 @@ bool Board::isWin() {
     if(slotsUsed < 5){ // yes, the least amount of slots needed for someone to win is 5
         return false;
     }
-    short verticalConsecutive = 0;
-    short lastVertical = board[0][0];
 
-    short horizontalConsecutive = 0;
-    short lastHorizontal = board[0][0];
     for (int i = 0; i < 3; ++i) {
+        short consecutive = 0;
+        short last = board[i][0];
         for (int j = 0; j < 3; ++j) {
-
-            if(board[i][j] == lastHorizontal){
-                horizontalConsecutive++;
-                if(horizontalConsecutive == 3){
+            if(board[i][j] == last){
+                consecutive++;
+                if(consecutive == 3 && last != 5)
                     return true;
-                }
             }else{
-                horizontalConsecutive = 0;
-            }
-
-            if(board[j][i] == lastVertical){
-                verticalConsecutive++;
-                if(verticalConsecutive == 3) {
-                    return true;
-                }
-            }else{
-                verticalConsecutive = 0;
+                break;
             }
         }
     }
+
+    for (int i = 0; i < 3; ++i) {
+        short consecutive = 0;
+        short last = board[0][i];
+        for (int j = 0; j < 3; ++j) {
+            if(board[j][i] == last){
+                consecutive++;
+                if(consecutive == 3 && last != 5)
+                    return true;
+            }else{
+                break;
+            }
+        }
+    }
+
     if(board[0][0] == board[1][1] && board[1][1] == board[2][2]){
         return true;
     }
@@ -91,8 +93,16 @@ bool Board::isWin() {
 }
 
 bool Board::isDrawAssumingNotWin() const {
-    if(slotsUsed == 9){
+    if(slotsUsed >= 9){
         return true;
     }
     return false;
+}
+
+void Board::setGameState(short x) {
+    gameState = x;
+}
+
+void Board::freeSlot() {
+    slotsUsed--;
 }

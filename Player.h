@@ -19,6 +19,11 @@ public:
         y = Y;
         value = Val;
     }
+    Point(Point & other){
+        x = other.x;
+        y = other.y;
+        value = other.value;
+    }
     short x, y, value = 0;
 };
 
@@ -40,8 +45,8 @@ public:
 
 class AI : public Player{
 protected:
-    Point bestmove;
-    short minMax(Board & board, short maxOrMin);
+//    Point bestMove{0,0,INT16_MAX};
+    short minMax(Board board, bool isMaximize);
 public:
     AI(Board&);
     AI();

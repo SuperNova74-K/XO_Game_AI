@@ -103,41 +103,73 @@ AI::AI(Board&) {
 }
 
 void AI::play(Board & board) {
-    Player::play(board);
-}
-
-short AI::minMax(Board & board, short maxOrMin) {
-    if(board.isWin()){
-        if(maxOrMin == 3){
-            return 0;
-        }else{
-            return 2;
-        }
-    }else if(board.isDrawAssumingNotWin()){
-        return 1;
-    }
-
+    // AI always minimizes
+    short bestScore = SHRT_MAX;
+    Point bestMove;
     for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
-            if(board[i][j] == 0){
-                board[i][j] = maxOrMin;
-                char temp = minMax(board,((maxOrMin == 3) ? 4 : 3));
-                if(maxOrMin == 'x'){
-                    // max
-                    if(temp >= bestmove.value){
-                        bestmove.value = temp;
-                        bestmove.x = i;
-                        bestmove.y = j;
-                    }
-                }else{
-                    if(temp <= bestmove.value){
-                        bestmove.value = temp;
-                        bestmove.x = i;
-                        bestmove.y = j;
-                    }
+            if(board[i][j] == 5){ // if slot is available try to minMax on it
+                board[i][j] = 4;
+                board.useSlot();
+
+                short temp = minMax(board, true);
+                if(temp < bestScore){
+                    bestScore = temp;
+                    bestMove.x = i;
+                    bestMove.y = j;
                 }
+
                 board[i][j] = 5;
+                board.freeSlot();
             }
         }
+    }
+    board[bestMove.x][bestMove.y] = 4;
+}
+
+short AI::minMax(Board board, bool isMaximize){
+    // base case
+    if(board.isWin()){
+        if(isMaximize){
+            return -1;
+        }
+        return 1;
+    }else if(board.isDrawAssumingNotWin()){
+        return 0;
+    }
+
+    if(isMaximize){
+        short bestScore = SHRT_MIN;
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if(board[i][j] == 5){
+                    board[i][j] = 3;
+                    board.useSlot();
+
+                    bestScore = max(bestScore, minMax(board, false));
+
+                    board[i][j] = 5;
+                    board.freeSlot();
+                }
+            }
+        }
+        return bestScore;
+    }else{
+        // here we minimze
+        short bestScore = SHRT_MAX;
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if(board[i][j] == 5){
+                    board[i][j] = 4;
+
+                    board.useSlot();
+                    bestScore = min(bestScore, minMax(board, true));
+
+                    board.freeSlot();
+                    board[i][j] = 5;
+                }
+            }
+        }
+        return bestScore;
     }
 }
