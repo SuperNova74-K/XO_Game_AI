@@ -21,7 +21,7 @@ void GameRunner::run() {
 
         if(not validUserChoice){
             cout << "Invalid Input!"
-                    "Please Try Again...";
+                    "Please Try Again...\n";
             systemPause();
             clearTerminal();
         }

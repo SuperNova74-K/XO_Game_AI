@@ -45,14 +45,11 @@ public:
 
 class AI : public Player{
 protected:
-//    Point bestMove{0,0,INT16_MAX};
     short minMax(Board board, bool isMaximize);
 public:
     AI(Board&);
     AI();
     void play(Board & board) override;
-
-    // minmax here
 };
 
 #endif //XO_GAME_AI_PLAYER_H
